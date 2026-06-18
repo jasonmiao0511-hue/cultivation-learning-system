@@ -11,7 +11,11 @@ export function loadProgress(): Progress {
   if (!raw) {
     return { english: [], chinese: [], math: [], totalCultivation: 0, currentRealm: '凡人' }
   }
-  return JSON.parse(raw) as Progress
+  try {
+    return JSON.parse(raw) as Progress
+  } catch {
+    return { english: [], chinese: [], math: [], totalCultivation: 0, currentRealm: '凡人' }
+  }
 }
 
 export function saveProgress(progress: Progress): void {
@@ -21,7 +25,11 @@ export function saveProgress(progress: Progress): void {
 export function loadRecords(): Record<string, DailyRecord> {
   const raw = localStorage.getItem(KEYS.records)
   if (!raw) return {}
-  return JSON.parse(raw) as Record<string, DailyRecord>
+  try {
+    return JSON.parse(raw) as Record<string, DailyRecord>
+  } catch {
+    return {}
+  }
 }
 
 export function saveRecords(records: Record<string, DailyRecord>): void {
@@ -31,7 +39,11 @@ export function saveRecords(records: Record<string, DailyRecord>): void {
 export function loadCustomTasks(): CustomTask[] {
   const raw = localStorage.getItem(KEYS.customTasks)
   if (!raw) return []
-  return JSON.parse(raw) as CustomTask[]
+  try {
+    return JSON.parse(raw) as CustomTask[]
+  } catch {
+    return []
+  }
 }
 
 export function saveCustomTasks(tasks: CustomTask[]): void {
@@ -48,8 +60,16 @@ export function exportData(): string {
 }
 
 export function importData(json: string): void {
-  const data = JSON.parse(json)
-  if (data.progress) saveProgress(data.progress)
-  if (data.records) saveRecords(data.records)
-  if (data.customTasks) saveCustomTasks(data.customTasks)
+  let data: unknown
+  try {
+    data = JSON.parse(json)
+  } catch {
+    throw new Error('Invalid JSON data')
+  }
+  if (data && typeof data === 'object') {
+    const d = data as Record<string, unknown>
+    if (d.progress) saveProgress(d.progress as Progress)
+    if (d.records) saveRecords(d.records as Record<string, DailyRecord>)
+    if (d.customTasks) saveCustomTasks(d.customTasks as CustomTask[])
+  }
 }

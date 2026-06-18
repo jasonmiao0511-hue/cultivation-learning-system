@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest'
-import { loadProgress, saveProgress, exportData, importData } from '../../src/services/storage'
+import { loadProgress, saveProgress, loadRecords, loadCustomTasks, exportData, importData } from '../../src/services/storage'
 
 describe('storage', () => {
   beforeEach(() => {
@@ -24,5 +24,26 @@ describe('storage', () => {
     localStorage.clear()
     importData(json)
     expect(loadProgress().currentRealm).toBe('炼气')
+  })
+
+  it('returns default progress when localStorage has malformed JSON', () => {
+    localStorage.setItem('cultivation-progress', 'not-json')
+    const progress = loadProgress()
+    expect(progress.currentRealm).toBe('凡人')
+    expect(progress.totalCultivation).toBe(0)
+  })
+
+  it('returns empty records when localStorage has malformed JSON', () => {
+    localStorage.setItem('daily-records', 'not-json')
+    expect(loadRecords()).toEqual({})
+  })
+
+  it('returns empty customTasks when localStorage has malformed JSON', () => {
+    localStorage.setItem('custom-tasks', 'not-json')
+    expect(loadCustomTasks()).toEqual([])
+  })
+
+  it('throws clear error on importData with invalid JSON', () => {
+    expect(() => importData('not-json')).toThrow('Invalid JSON data')
   })
 })
