@@ -1,0 +1,42 @@
+import { useState, useEffect } from 'react'
+import type { DailyRecord } from '../types'
+import { loadRecords, saveRecords } from '../services/storage'
+import { getToday } from '../utils/date'
+
+export function useRecords() {
+  const [records, setRecords] = useState<Record<string, DailyRecord>>(() => loadRecords())
+
+  useEffect(() => {
+    saveRecords(records)
+  }, [records])
+
+  const updateRecord = (date: string, partial: Partial<DailyRecord>) => {
+    setRecords((prev) => ({
+      ...prev,
+      [date]: { ...prev[date], date, ...partial } as DailyRecord,
+    }))
+  }
+
+  const getRecord = (date: string): DailyRecord => {
+    return records[date] || { date, tasks: [], totalDuration: 0, cultivation: 0, completedCount: 0, streakContinued: false }
+  }
+
+  const calculateStreak = (): number => {
+    let streak = 0
+    const today = getToday()
+    for (let i = 0; i < 365; i++) {
+      const d = new Date(today)
+      d.setDate(d.getDate() - i)
+      const dateStr = d.toISOString().split('T')[0]
+      const record = records[dateStr]
+      if (record && record.completedCount > 0) {
+        streak++
+      } else if (i > 0) {
+        break
+      }
+    }
+    return streak
+  }
+
+  return { records, updateRecord, getRecord, calculateStreak }
+}
