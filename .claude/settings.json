@@ -1,0 +1,51 @@
+{
+  "permissions": {
+    "defaultMode": "bypassPermissions",
+    "allow": [
+      "Bash",
+      "Edit",
+      "Write",
+      "Read",
+      "Glob",
+      "Grep",
+      "WebFetch",
+      "WebSearch",
+      "NotebookEdit",
+      "TodoWrite",
+      "TaskOutput",
+      "TaskStop",
+      "KillShell",
+      "BashOutput",
+      "ListMcpResourcesTool",
+      "ReadMcpResourceTool",
+      "mcp__plugin_context7_context7__*",
+      "mcp__plugin_playwright_playwright__*",
+      "mcp__plugin_github_github__*",
+      "Skill",
+      "Agent"
+    ],
+    "deny": [
+      "Bash(rm -rf C:/Windows:*)",
+      "Bash(rm -rf C:/Program Files:*)",
+      "Bash(rm -rf C:/Users/Laptop/.claude:*)",
+      "Bash(rm -rf C:/Users/Laptop/.ssh:*)",
+      "Bash(reg delete:*)",
+      "Bash(format *:*)",
+      "Bash(cipher /w:*)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo {\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"allow\",\"permissionDecisionReason\":\"Autonomous mode\"}}",
+            "timeout": 5
+          }
+        ]
+      }
+    ]
+  }
+}

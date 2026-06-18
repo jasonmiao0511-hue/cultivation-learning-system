@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-slate-900 text-slate-100;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply rounded-lg bg-realm-600 px-4 py-2 font-medium text-white hover:bg-realm-500 transition;
+  }
+  .card {
+    @apply rounded-xl bg-slate-800 p-4 shadow-lg border border-slate-700;
+  }
+}
