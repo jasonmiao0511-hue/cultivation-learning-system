@@ -17,6 +17,7 @@ export default function TaskItem({ task, expanded, onToggle, onComplete }: Props
         <div className="flex items-center gap-3">
           <button
             onClick={onComplete}
+            disabled={task.completed}
             className={`h-6 w-6 rounded-full border-2 ${task.completed ? 'bg-emerald-500 border-emerald-500' : 'border-slate-400'}`}
           />
           <span className={`font-medium ${task.completed ? 'line-through text-slate-500' : ''}`}>{task.title}</span>

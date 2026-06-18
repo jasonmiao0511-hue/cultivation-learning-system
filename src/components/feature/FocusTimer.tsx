@@ -12,14 +12,24 @@ export default function FocusTimer({ onComplete }: Props) {
 
   useEffect(() => {
     if (running) {
-      intervalRef.current = setInterval(() => setSeconds((s) => s + 1), 1000)
+      intervalRef.current = setInterval(() => {
+        setSeconds((s) => {
+          const next = s + 1
+          if (preset.current > 0 && next >= preset.current * 60) {
+            setRunning(false)
+            if (onComplete) onComplete(preset.current)
+            return preset.current * 60
+          }
+          return next
+        })
+      }, 1000)
     } else if (intervalRef.current) {
       clearInterval(intervalRef.current)
     }
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current)
     }
-  }, [running])
+  }, [running, onComplete])
 
   const start = (min: number) => {
     preset.current = min

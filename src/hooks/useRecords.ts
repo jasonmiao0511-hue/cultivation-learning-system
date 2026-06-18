@@ -11,10 +11,14 @@ export function useRecords() {
   }, [records])
 
   const updateRecord = (date: string, partial: Partial<DailyRecord>) => {
-    setRecords((prev) => ({
-      ...prev,
-      [date]: { ...prev[date], date, ...partial } as DailyRecord,
-    }))
+    setRecords((prev) => {
+      const existing = prev[date]
+      const defaults: DailyRecord = { date, tasks: [], totalDuration: 0, cultivation: 0, completedCount: 0, streakContinued: false }
+      return {
+        ...prev,
+        [date]: { ...defaults, ...existing, ...partial, date },
+      }
+    })
   }
 
   const getRecord = (date: string): DailyRecord => {

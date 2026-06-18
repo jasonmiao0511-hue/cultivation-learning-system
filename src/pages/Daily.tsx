@@ -20,7 +20,7 @@ export default function Daily() {
   )
   const [combo, setCombo] = useState(0)
 
-  const quote = QUOTES[Math.floor(Math.random() * QUOTES.length)]
+  const quote = useMemo(() => QUOTES[Math.floor(Math.random() * QUOTES.length)], [])
   const completedCount = tasks.filter((t) => t.completed).length
   const allDone = completedCount === tasks.length && tasks.length > 0
 
@@ -36,7 +36,6 @@ export default function Daily() {
     const today = getToday()
     const record = getRecord(today)
     updateRecord(today, {
-      tasks: record.tasks.map((t) => (t.id === task.id ? { ...t, completed: true, completedAt: new Date().toISOString() } : t)),
       completedCount: record.completedCount + 1,
       cultivation: record.cultivation + cultivation,
     })
@@ -58,6 +57,12 @@ export default function Daily() {
     const groups: Record<string, Task[]> = { english: [], chinese: [], math: [], custom: [] }
     tasks.forEach((t) => groups[t.subject].push(t))
     return groups
+  }, [tasks])
+
+  const taskIndexMap = useMemo(() => {
+    const map = new Map<string, number>()
+    tasks.forEach((t, i) => map.set(t.id, i))
+    return map
   }, [tasks])
 
   const subjectNames: Record<string, string> = {
@@ -90,19 +95,16 @@ export default function Daily() {
           list.length > 0 ? (
             <div key={subject} className="mb-4">
               <div className="mb-2 font-bold">{subjectNames[subject]}</div>
-              {list.map((task, index) => {
-                const globalIndex = tasks.findIndex((t) => t.id === task.id)
-                return (
-                  <div key={task.id} id={`task-${task.id}`}>
-                    <TaskItem
-                      task={task}
-                      expanded={expandedId === task.id}
-                      onToggle={() => setExpandedId(expandedId === task.id ? null : task.id)}
-                      onComplete={() => handleComplete(task, globalIndex)}
-                    />
-                  </div>
-                )
-              })}
+              {list.map((task, index) => (
+                <div key={task.id} id={`task-${task.id}`}>
+                  <TaskItem
+                    task={task}
+                    expanded={expandedId === task.id}
+                    onToggle={() => setExpandedId(expandedId === task.id ? null : task.id)}
+                    onComplete={() => handleComplete(task, taskIndexMap.get(task.id) ?? 0)}
+                  />
+                </div>
+              ))}
             </div>
           ) : null
         )}
