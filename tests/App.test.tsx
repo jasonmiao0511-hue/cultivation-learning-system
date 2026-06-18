@@ -21,6 +21,6 @@ describe('App scaffold', () => {
         <App />
       </MemoryRouter>,
     )
-    expect(screen.getByText('洞府首页')).toBeInTheDocument()
+    expect(screen.getByText('道友，今日该闭关了')).toBeInTheDocument()
   })
 })
