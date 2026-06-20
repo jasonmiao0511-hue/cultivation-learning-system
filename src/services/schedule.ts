@@ -98,5 +98,20 @@ export function generateDailyPlan(date: string, progress: Progress, customTasks:
     }
   })
 
+  // 周末宗门试炼
+  const dayOfWeek = new Date(date).getDay()
+  if (dayOfWeek === 0 || dayOfWeek === 6) {
+    tasks.push({
+      id: generateId('task'),
+      title: '宗门试炼 · 周末综合',
+      subject: 'english',
+      type: 'practice',
+      duration: 30,
+      priority: 'high',
+      completed: false,
+      source: 'auto',
+    })
+  }
+
   return tasks
 }
