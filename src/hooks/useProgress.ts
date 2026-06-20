@@ -1,14 +1,23 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import type { Progress } from '../types'
 import { loadProgress, saveProgress } from '../services/storage'
 import { calculateRealm } from '../utils/realm'
 
 export function useProgress() {
   const [progress, setProgress] = useState<Progress>(() => loadProgress())
+  const [newRealm, setNewRealm] = useState<string | null>(null)
+  const previousRealm = useRef(progress.currentRealm)
 
   useEffect(() => {
     saveProgress(progress)
   }, [progress])
+
+  useEffect(() => {
+    if (progress.currentRealm !== previousRealm.current && previousRealm.current !== '') {
+      setNewRealm(progress.currentRealm)
+    }
+    previousRealm.current = progress.currentRealm
+  }, [progress.currentRealm])
 
   const completeContent = (subject: 'english' | 'chinese' | 'math', contentId: string, cultivation: number) => {
     setProgress((prev) => {
@@ -20,5 +29,7 @@ export function useProgress() {
     })
   }
 
-  return { progress, completeContent }
+  const acknowledgeRealmChange = () => setNewRealm(null)
+
+  return { progress, completeContent, newRealm, acknowledgeRealmChange }
 }

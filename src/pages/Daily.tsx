@@ -6,12 +6,14 @@ import { useDailyTasks } from '../hooks/useDailyTasks'
 import { useRecords } from '../hooks/useRecords'
 import TaskItem from '../components/feature/TaskItem'
 import FocusTimer from '../components/feature/FocusTimer'
+import DefeatAnimation from '../components/feature/DefeatAnimation'
+import RealmUpAnimation from '../components/feature/RealmUpAnimation'
 import { getToday, formatDate } from '../utils/date'
 import { calculateCultivation } from '../utils/realm'
 import { QUOTES } from '../mocks/quotes'
 
 export default function Daily() {
-  const { progress, completeContent } = useProgress()
+  const { progress, completeContent, newRealm, acknowledgeRealmChange } = useProgress()
   const { customTasks } = useCustomTasks()
   const { updateRecord, getRecord } = useRecords()
   const tasks = useDailyTasks(progress, customTasks)
@@ -19,6 +21,7 @@ export default function Daily() {
     tasks.find((t) => !t.completed)?.id || null
   )
   const [combo, setCombo] = useState(0)
+  const [showDefeat, setShowDefeat] = useState(false)
 
   const quote = useMemo(() => QUOTES[Math.floor(Math.random() * QUOTES.length)], [])
   const completedCount = tasks.filter((t) => t.completed).length
@@ -41,6 +44,7 @@ export default function Daily() {
     })
 
     setCombo((c) => c + 1)
+    setShowDefeat(true)
 
     const next = tasks.slice(index + 1).find((t) => !t.completed)
     if (next) {
@@ -117,6 +121,9 @@ export default function Daily() {
           updateRecord(today, { totalDuration: record.totalDuration + min })
         }} />
       </div>
+
+      <DefeatAnimation show={showDefeat} onDone={() => setShowDefeat(false)} />
+      {newRealm && <RealmUpAnimation realm={newRealm} onDone={acknowledgeRealmChange} />}
     </div>
   )
 }
