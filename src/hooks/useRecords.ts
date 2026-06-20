@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import type { DailyRecord } from '../types'
 import { loadRecords, saveRecords } from '../services/storage'
-import { getToday } from '../utils/date'
+import { getToday, addDays } from '../utils/date'
 
 export function useRecords() {
   const [records, setRecords] = useState<Record<string, DailyRecord>>(() => loadRecords())
@@ -29,9 +29,7 @@ export function useRecords() {
     let streak = 0
     const today = getToday()
     for (let i = 0; i < 365; i++) {
-      const d = new Date(today)
-      d.setDate(d.getDate() - i)
-      const dateStr = d.toISOString().split('T')[0]
+      const dateStr = addDays(today, -i)
       const record = records[dateStr]
       if (record && record.completedCount > 0) {
         streak++
