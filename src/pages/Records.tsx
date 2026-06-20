@@ -1,12 +1,13 @@
 import { useMemo } from 'react'
-import { useRecords } from '../hooks/useRecords'
-import { useProgress } from '../hooks/useProgress'
+import { useAppState } from '../context/AppStateContext'
 import Calendar from '../components/feature/Calendar'
 import BadgeList from '../components/feature/BadgeList'
+import { ENGLISH_WORDS } from '../mocks/englishData'
+import { CHINESE_LESSONS } from '../mocks/chineseData'
+import { MATH_TOPICS } from '../mocks/mathData'
 
 export default function Records() {
-  const { records, calculateStreak } = useRecords()
-  const { progress } = useProgress()
+  const { records, calculateStreak, progress } = useAppState()
 
   const totalCompleted = useMemo(() =>
     Object.values(records).reduce((sum, r) => sum + r.completedCount, 0),
@@ -17,7 +18,9 @@ export default function Records() {
     [records]
   )
 
-  const allComplete = progress.english.length >= 60 && progress.chinese.length >= 13 && progress.math.length >= 2
+  const allComplete = progress.english.length >= ENGLISH_WORDS.length
+    && progress.chinese.length >= CHINESE_LESSONS.length
+    && progress.math.length >= MATH_TOPICS.length
 
   return (
     <div className="space-y-4">

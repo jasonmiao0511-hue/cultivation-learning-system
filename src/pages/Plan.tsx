@@ -1,13 +1,9 @@
 import { useState, useMemo } from 'react'
-import { useProgress } from '../hooks/useProgress'
-import { useCustomTasks } from '../hooks/useCustomTasks'
-import { generateDailyPlan } from '../services/schedule'
+import { useAppState } from '../context/AppStateContext'
+import { generateDailyPlan, START_DATE, TOTAL_DAYS } from '../services/schedule'
 import PlanDayCard from '../components/feature/PlanDayCard'
 import ProgressBar from '../components/base/ProgressBar'
 import { addDays } from '../utils/date'
-
-const START_DATE = '2026-06-25'
-const TOTAL_DAYS = 62
 
 const subjects = [
   { key: 'all', label: '全部' },
@@ -17,8 +13,7 @@ const subjects = [
 ]
 
 export default function Plan() {
-  const { progress } = useProgress()
-  const { customTasks } = useCustomTasks()
+  const { progress, customTasks } = useAppState()
   const [filter, setFilter] = useState('all')
 
   const plan = useMemo(() => {
@@ -40,7 +35,7 @@ export default function Plan() {
   return (
     <div className="space-y-4">
       <div className="card">
-        <h1 className="text-xl font-bold">功法总纲 · 62 天渡劫计划</h1>
+        <h1 className="text-xl font-bold">功法总纲 · {TOTAL_DAYS} 天渡劫计划</h1>
         <ProgressBar value={completedTasks} max={totalTasks} label={`总进度 ${completedTasks}/${totalTasks}`} />
       </div>
 
@@ -63,7 +58,6 @@ export default function Plan() {
             day={d.day}
             date={d.date}
             tasks={d.tasks}
-            onClick={() => {}}
           />
         ))}
       </div>

@@ -1,10 +1,10 @@
 import { useState } from 'react'
-import { useProgress } from '../../hooks/useProgress'
+import { useAppState } from '../../context/AppStateContext'
 import { MATH_TOPICS } from '../../mocks/mathData'
 import SubjectSidebar from '../../components/feature/SubjectSidebar'
 
 export default function Math() {
-  const { progress, completeContent } = useProgress()
+  const { progress, completeContent } = useAppState()
   const [activeId, setActiveId] = useState(MATH_TOPICS[0]?.id || '')
   const topic = MATH_TOPICS.find((t) => t.id === activeId)
 

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import type { CustomTask } from '../types'
 import { loadCustomTasks, saveCustomTasks } from '../services/storage'
 import { generateId } from '../utils/id'
+import { getToday } from '../utils/date'
 
 export function useCustomTasks() {
   const [customTasks, setCustomTasks] = useState<CustomTask[]>(() => loadCustomTasks())
@@ -11,7 +12,12 @@ export function useCustomTasks() {
   }, [customTasks])
 
   const addCustomTask = (task: Omit<CustomTask, 'id'>) => {
-    setCustomTasks((prev) => [...prev, { ...task, id: generateId('custom') }])
+    const enriched: CustomTask = {
+      ...task,
+      id: generateId('custom'),
+      dayOfWeek: task.repeatRule === 'weekly' ? new Date(getToday()).getDay() : undefined,
+    }
+    setCustomTasks((prev) => [...prev, enriched])
   }
 
   const removeCustomTask = (id: string) => {

@@ -1,26 +1,21 @@
 import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import { useProgress } from '../hooks/useProgress'
-import { useCustomTasks } from '../hooks/useCustomTasks'
-import { useDailyTasks } from '../hooks/useDailyTasks'
-import { useRecords } from '../hooks/useRecords'
+import { useAppState } from '../context/AppStateContext'
 import RealmBadge from '../components/feature/RealmBadge'
 import TaskSummary from '../components/feature/TaskSummary'
 import ProgressBar from '../components/base/ProgressBar'
 import { QUOTES } from '../mocks/quotes'
 import { CHINESE_LESSONS } from '../mocks/chineseData'
 import { MATH_TOPICS } from '../mocks/mathData'
+import { ENGLISH_WORDS } from '../mocks/englishData'
 import { getToday } from '../utils/date'
 
 export default function Home() {
-  const { progress } = useProgress()
-  const { customTasks } = useCustomTasks()
-  const { calculateStreak, getRecord } = useRecords()
-  const tasks = useDailyTasks(progress, customTasks)
+  const { progress, customTasks, calculateStreak, getRecord, tasks } = useAppState()
   const quote = useMemo(() => QUOTES[Math.floor(Math.random() * QUOTES.length)], [])
 
   const todayRecord = getRecord(getToday())
-  const totalEnglish = 60
+  const totalEnglish = ENGLISH_WORDS.length
   const totalChinese = CHINESE_LESSONS.length
   const totalMath = MATH_TOPICS.length
 

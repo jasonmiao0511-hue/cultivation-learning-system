@@ -1,9 +1,6 @@
 import { useState, useMemo } from 'react'
 import type { Task } from '../types'
-import { useProgress } from '../hooks/useProgress'
-import { useCustomTasks } from '../hooks/useCustomTasks'
-import { useDailyTasks } from '../hooks/useDailyTasks'
-import { useRecords } from '../hooks/useRecords'
+import { useAppState } from '../context/AppStateContext'
 import TaskItem from '../components/feature/TaskItem'
 import FocusTimer from '../components/feature/FocusTimer'
 import DefeatAnimation from '../components/feature/DefeatAnimation'
@@ -12,14 +9,16 @@ import { getToday, formatDate } from '../utils/date'
 import { calculateCultivation } from '../utils/realm'
 import { QUOTES } from '../mocks/quotes'
 
+const subjectNames: Record<string, string> = {
+  english: '英语功法',
+  chinese: '语文功法',
+  math: '数学功法',
+  custom: '自定义历练',
+}
+
 export default function Daily() {
-  const { progress, completeContent, newRealm, acknowledgeRealmChange } = useProgress()
-  const { customTasks } = useCustomTasks()
-  const { updateRecord, getRecord } = useRecords()
-  const tasks = useDailyTasks(progress, customTasks)
-  const [expandedId, setExpandedId] = useState<string | null>(
-    tasks.find((t) => !t.completed)?.id || null
-  )
+  const { progress, completeContent, newRealm, acknowledgeRealmChange, customTasks, updateRecord, getRecord, tasks } = useAppState()
+  const [expandedId, setExpandedId] = useState<string | null>(() => tasks.find((t) => !t.completed)?.id || null)
   const [combo, setCombo] = useState(0)
   const [showDefeat, setShowDefeat] = useState(false)
 
@@ -69,13 +68,6 @@ export default function Daily() {
     return map
   }, [tasks])
 
-  const subjectNames: Record<string, string> = {
-    english: '英语功法',
-    chinese: '语文功法',
-    math: '数学功法',
-    custom: '自定义历练',
-  }
-
   if (allDone) {
     return (
       <div className="card py-12 text-center">
@@ -92,7 +84,7 @@ export default function Daily() {
         <div className="card mb-4">
           <h1 className="text-xl font-bold">{formatDate(getToday())} · 今日历练</h1>
           <p className="text-slate-400">「{quote}」</p>
-          <div className="mt-2 text-sm">已完成 {completedCount}/{tasks.length} · 连击 {combo}</div>
+          <div className="mt-2 text-sm">已完成 {completedCount}/{tasks.length} · 下一击连击 ×{combo + 1}</div>
         </div>
 
         {Object.entries(grouped).map(([subject, list]) =>

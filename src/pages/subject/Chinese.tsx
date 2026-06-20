@@ -1,10 +1,10 @@
 import { useState } from 'react'
-import { useProgress } from '../../hooks/useProgress'
+import { useAppState } from '../../context/AppStateContext'
 import { CHINESE_LESSONS } from '../../mocks/chineseData'
 import SubjectSidebar from '../../components/feature/SubjectSidebar'
 
 export default function Chinese() {
-  const { progress, completeContent } = useProgress()
+  const { progress, completeContent } = useAppState()
   const [activeId, setActiveId] = useState(CHINESE_LESSONS[0]?.id || '')
   const lesson = CHINESE_LESSONS.find((l) => l.id === activeId)
 

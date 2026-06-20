@@ -39,6 +39,7 @@ export interface CustomTask {
   duration: number
   priority: Priority
   repeatRule: 'none' | 'daily' | 'weekly'
+  dayOfWeek?: number
 }
 
 export interface VocabWord {

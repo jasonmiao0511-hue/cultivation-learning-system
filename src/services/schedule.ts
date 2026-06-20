@@ -1,5 +1,5 @@
 import type { CustomTask, Progress, Task } from '../types'
-import { addDays } from '../utils/date'
+import { addDays, parseLocalDate, daysBetween } from '../utils/date'
 import { generateId } from '../utils/id'
 import { ENGLISH_WORDS } from '../mocks/englishData'
 import { CHINESE_LESSONS } from '../mocks/chineseData'
@@ -8,11 +8,14 @@ import { MATH_TOPICS } from '../mocks/mathData'
 const START_DATE = '2026-06-25'
 const END_DATE = '2026-08-25'
 
+export { START_DATE, END_DATE }
+export const TOTAL_DAYS = 62
+
 export function generateDailyPlan(date: string, progress: Progress, customTasks: CustomTask[]): Task[] {
-  const dayIndex = Math.max(0, Math.floor((new Date(date).getTime() - new Date(START_DATE).getTime()) / (1000 * 60 * 60 * 24)))
+  const dayIndex = Math.max(0, daysBetween(START_DATE, date))
   const tasks: Task[] = []
 
-  // 英语：每天 2 个新词（演示用少量，真实环境扩展）
+  // 英语：每天 2 个新词
   const englishStart = dayIndex * 2
   const englishWords = ENGLISH_WORDS.slice(englishStart, englishStart + 2)
   englishWords.forEach((word) => {
@@ -32,7 +35,7 @@ export function generateDailyPlan(date: string, progress: Progress, customTasks:
   // 艾宾浩斯复习
   ;[1, 2, 4, 7, 15].forEach((interval) => {
     const reviewDate = addDays(date, -interval)
-    const reviewDayIndex = Math.floor((new Date(reviewDate).getTime() - new Date(START_DATE).getTime()) / (1000 * 60 * 60 * 24))
+    const reviewDayIndex = Math.max(0, daysBetween(START_DATE, reviewDate))
     const reviewWords = ENGLISH_WORDS.slice(reviewDayIndex * 2, reviewDayIndex * 2 + 2)
     reviewWords.forEach((word) => {
       tasks.push({
@@ -42,7 +45,7 @@ export function generateDailyPlan(date: string, progress: Progress, customTasks:
         type: 'review',
         duration: 5,
         priority: 'high',
-        completed: false,
+        completed: progress.english.includes(word.id),
         source: 'auto',
         contentId: word.id,
       })
@@ -82,8 +85,12 @@ export function generateDailyPlan(date: string, progress: Progress, customTasks:
   }
 
   // 自定义任务
+  const dateDayOfWeek = parseLocalDate(date).getDay()
   customTasks.forEach((ct) => {
-    if (ct.repeatRule === 'daily' || (ct.repeatRule === 'weekly' && new Date(date).getDay() !== 0)) {
+    const match =
+      ct.repeatRule === 'daily' ||
+      (ct.repeatRule === 'weekly' && (ct.dayOfWeek ?? dateDayOfWeek) === dateDayOfWeek)
+    if (match) {
       tasks.push({
         id: generateId('task'),
         title: ct.name,
@@ -99,7 +106,7 @@ export function generateDailyPlan(date: string, progress: Progress, customTasks:
   })
 
   // 周末宗门试炼
-  const dayOfWeek = new Date(date).getDay()
+  const dayOfWeek = parseLocalDate(date).getDay()
   if (dayOfWeek === 0 || dayOfWeek === 6) {
     tasks.push({
       id: generateId('task'),

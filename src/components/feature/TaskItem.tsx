@@ -18,11 +18,13 @@ export default function TaskItem({ task, expanded, onToggle, onComplete }: Props
           <button
             onClick={onComplete}
             disabled={task.completed}
+            aria-label={task.completed ? '已完成' : '标记完成'}
+            aria-pressed={task.completed}
             className={`h-6 w-6 rounded-full border-2 ${task.completed ? 'bg-emerald-500 border-emerald-500' : 'border-slate-400'}`}
           />
           <span className={`font-medium ${task.completed ? 'line-through text-slate-500' : ''}`}>{task.title}</span>
         </div>
-        <button onClick={onToggle} className="text-sm text-realm-400">{expanded ? '收起' : '展开'}</button>
+        <button onClick={onToggle} aria-expanded={expanded} className="text-sm text-realm-400">{expanded ? '收起' : '展开'}</button>
       </div>
       {expanded && (
         <div className="mt-4">

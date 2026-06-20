@@ -1,11 +1,11 @@
 import { useState } from 'react'
-import { useProgress } from '../../hooks/useProgress'
+import { useAppState } from '../../context/AppStateContext'
 import { ENGLISH_WORDS } from '../../mocks/englishData'
 import VocabCard from '../../components/feature/VocabCard'
 import SubjectSidebar from '../../components/feature/SubjectSidebar'
 
 export default function English() {
-  const { progress, completeContent } = useProgress()
+  const { progress, completeContent } = useAppState()
   const [activeId, setActiveId] = useState(ENGLISH_WORDS[0]?.id || '')
   const activeWord = ENGLISH_WORDS.find((w) => w.id === activeId)
 

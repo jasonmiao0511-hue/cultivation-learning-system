@@ -1,15 +1,11 @@
 import { describe, it, expect } from 'vitest'
-import { render, screen } from '@testing-library/react'
-import { MemoryRouter } from 'react-router-dom'
+import { screen } from '@testing-library/react'
 import Chinese from '../../src/pages/subject/Chinese'
+import { render } from '../test-utils'
 
 describe('Chinese', () => {
   it('renders chinese subject page', () => {
-    render(
-      <MemoryRouter>
-        <Chinese />
-      </MemoryRouter>,
-    )
+    render(<Chinese />)
     expect(screen.getByText(/语文功法/)).toBeInTheDocument()
   })
 })

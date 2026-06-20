@@ -11,6 +11,7 @@ export default function SubjectSidebar({ items, activeId, onSelect }: Props) {
         <button
           key={item.id}
           onClick={() => onSelect(item.id)}
+          aria-current={activeId === item.id ? 'page' : undefined}
           className={`block w-full rounded px-3 py-2 text-left text-sm ${activeId === item.id ? 'bg-realm-700 text-white' : 'hover:bg-slate-700'}`}
         >
           <span>{item.completed ? '✅ ' : ''}{item.title}</span>

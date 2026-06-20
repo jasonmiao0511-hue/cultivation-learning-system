@@ -13,6 +13,10 @@ export default function VocabCard({ word, completed, onComplete }: Props) {
   return (
     <div
       onClick={() => setFlipped(!flipped)}
+      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setFlipped(!flipped) } }}
+      role="button"
+      tabIndex={0}
+      aria-label="翻转卡片"
       className={`card cursor-pointer transition ${completed ? 'border-emerald-500' : ''}`}
     >
       {!flipped ? (

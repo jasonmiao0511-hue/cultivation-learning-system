@@ -46,4 +46,28 @@ describe('storage', () => {
   it('throws clear error on importData with invalid JSON', () => {
     expect(() => importData('not-json')).toThrow('Invalid JSON data')
   })
+
+  it('rejects import with invalid progress shape', () => {
+    expect(() => importData(JSON.stringify({ progress: { totalCultivation: 'lots' } }))).toThrow('Invalid progress data')
+  })
+
+  it('rejects import with invalid records shape', () => {
+    expect(() => importData(JSON.stringify({ records: { '2026-06-25': { completedCount: 'one' } } }))).toThrow('Invalid records data')
+  })
+
+  it('rejects import with invalid custom tasks shape', () => {
+    expect(() => importData(JSON.stringify({ customTasks: [{ name: 123 }] }))).toThrow('Invalid custom tasks data')
+  })
+
+  it('round-trips records and custom tasks', () => {
+    const records = { '2026-06-25': { date: '2026-06-25', tasks: [], totalDuration: 30, cultivation: 20, completedCount: 2, streakContinued: true } }
+    const customTasks = [{ id: 'c1', name: '跑步', duration: 20, priority: 'high' as const, repeatRule: 'daily' as const }]
+    localStorage.setItem('daily-records', JSON.stringify(records))
+    localStorage.setItem('custom-tasks', JSON.stringify(customTasks))
+    const json = exportData()
+    localStorage.clear()
+    importData(json)
+    expect(loadRecords()).toEqual(records)
+    expect(loadCustomTasks()).toEqual(customTasks)
+  })
 })

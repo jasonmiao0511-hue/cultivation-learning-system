@@ -1,11 +1,26 @@
-import { useRef } from 'react'
-import { useCustomTasks } from '../hooks/useCustomTasks'
+import { useRef, useState } from 'react'
+import { useAppState } from '../context/AppStateContext'
 import CustomTaskForm from '../components/feature/CustomTaskForm'
 import { downloadBackup, uploadBackup } from '../services/backup'
 
 export default function Settings() {
-  const { customTasks, addCustomTask, removeCustomTask } = useCustomTasks()
+  const { customTasks, addCustomTask, removeCustomTask } = useAppState()
   const fileRef = useRef<HTMLInputElement>(null)
+  const [importStatus, setImportStatus] = useState<{ type: 'success' | 'error'; message: string } | null>(null)
+
+  const handleImport = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    try {
+      await uploadBackup(file)
+      setImportStatus({ type: 'success', message: '导入成功，页面即将刷新…' })
+      setTimeout(() => window.location.reload(), 800)
+    } catch (err) {
+      setImportStatus({ type: 'error', message: err instanceof Error ? err.message : '导入失败' })
+    } finally {
+      if (fileRef.current) fileRef.current.value = ''
+    }
+  }
 
   return (
     <div className="space-y-4">
@@ -25,10 +40,13 @@ export default function Settings() {
       <div className="card">
         <h2 className="text-lg font-bold">修为档案备份</h2>
         <button onClick={() => downloadBackup()} className="btn-primary mt-2">导出修为档案</button>
-        <input ref={fileRef} type="file" accept=".json" className="hidden" onChange={(e) => {
-          if (e.target.files?.[0]) uploadBackup(e.target.files[0]).then(() => alert('导入成功')).catch(() => alert('导入失败'))
-        }} />
+        <input ref={fileRef} type="file" accept=".json" className="hidden" onChange={handleImport} />
         <button onClick={() => fileRef.current?.click()} className="btn-primary mt-2 ml-2 bg-slate-700">导入修为档案</button>
+        {importStatus && (
+          <div className={`mt-2 text-sm ${importStatus.type === 'success' ? 'text-emerald-400' : 'text-red-400'}`}>
+            {importStatus.message}
+          </div>
+        )}
       </div>
     </div>
   )

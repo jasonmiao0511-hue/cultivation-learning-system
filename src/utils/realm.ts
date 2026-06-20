@@ -5,12 +5,12 @@ export interface Realm {
 
 export const REALMS: Realm[] = [
   { name: '凡人', threshold: 0 },
-  { name: '炼气', threshold: 60 },
-  { name: '筑基', threshold: 300 },
-  { name: '金丹', threshold: 900 },
-  { name: '元婴', threshold: 1800 },
-  { name: '化神', threshold: 3600 },
-  { name: '渡劫', threshold: 7200 },
+  { name: '炼气', threshold: 80 },
+  { name: '筑基', threshold: 400 },
+  { name: '金丹', threshold: 1000 },
+  { name: '元婴', threshold: 2000 },
+  { name: '化神', threshold: 3500 },
+  { name: '渡劫', threshold: 5000 },
 ]
 
 export function calculateRealm(cultivation: number): Realm {

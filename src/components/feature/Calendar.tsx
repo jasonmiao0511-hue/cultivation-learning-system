@@ -1,5 +1,7 @@
+import type { DailyRecord } from '../../types'
+
 interface Props {
-  records: Record<string, { completedCount: number } >
+  records: Record<string, DailyRecord>
   year: number
   month: number
 }

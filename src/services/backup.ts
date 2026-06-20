@@ -6,8 +6,10 @@ export function downloadBackup(filename = 'cultivation-backup.json') {
   const a = document.createElement('a')
   a.href = url
   a.download = filename
+  document.body.appendChild(a)
   a.click()
-  URL.revokeObjectURL(url)
+  document.body.removeChild(a)
+  setTimeout(() => URL.revokeObjectURL(url), 1000)
 }
 
 export function uploadBackup(file: File): Promise<void> {
