@@ -9,6 +9,8 @@ export default function FocusTimer({ onComplete }: Props) {
   const [running, setRunning] = useState(false)
   const preset = useRef(25)
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
+  const onCompleteRef = useRef(onComplete)
+  onCompleteRef.current = onComplete
 
   useEffect(() => {
     if (running) {
@@ -17,7 +19,7 @@ export default function FocusTimer({ onComplete }: Props) {
           const next = s + 1
           if (preset.current > 0 && next >= preset.current * 60) {
             setRunning(false)
-            if (onComplete) onComplete(preset.current)
+            if (onCompleteRef.current) onCompleteRef.current(preset.current)
             return preset.current * 60
           }
           return next
@@ -29,7 +31,7 @@ export default function FocusTimer({ onComplete }: Props) {
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current)
     }
-  }, [running, onComplete])
+  }, [running])
 
   const start = (min: number) => {
     preset.current = min
@@ -39,7 +41,7 @@ export default function FocusTimer({ onComplete }: Props) {
 
   const stop = () => {
     setRunning(false)
-    if (onComplete) onComplete(Math.ceil(seconds / 60))
+    if (onCompleteRef.current) onCompleteRef.current(Math.ceil(seconds / 60))
   }
 
   const displayMin = Math.floor(seconds / 60).toString().padStart(2, '0')
