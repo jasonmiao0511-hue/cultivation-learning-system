@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from 'vitest'
-import { loadProgress, saveProgress, loadRecords, loadCustomTasks, exportData, importData } from '../../src/services/storage'
+import { loadProgress, saveProgress, loadRecords, loadCustomTasks, loadReviewLogs, exportData, importData } from '../../src/services/storage'
 
 describe('storage', () => {
   beforeEach(() => {
@@ -13,13 +13,13 @@ describe('storage', () => {
   })
 
   it('saves and loads progress', () => {
-    const progress = { english: ['e1'], chinese: [], math: [], totalCultivation: 100, currentRealm: '炼气' }
+    const progress = { english: ['e1'], chinese: [], math: [], history: [], totalCultivation: 100, currentRealm: '炼气' }
     saveProgress(progress)
     expect(loadProgress().totalCultivation).toBe(100)
   })
 
   it('exports and imports data', () => {
-    saveProgress({ english: ['e1'], chinese: [], math: [], totalCultivation: 100, currentRealm: '炼气' })
+    saveProgress({ english: ['e1'], chinese: [], math: [], history: [], totalCultivation: 100, currentRealm: '炼气' })
     const json = exportData()
     localStorage.clear()
     importData(json)
@@ -69,5 +69,14 @@ describe('storage', () => {
     importData(json)
     expect(loadRecords()).toEqual(records)
     expect(loadCustomTasks()).toEqual(customTasks)
+  })
+
+  it('round-trips review logs', () => {
+    const logs = [{ contentId: 'e1', subject: 'english' as const, stage: 1, nextReviewDate: '2026-06-26' }]
+    localStorage.setItem('review-logs', JSON.stringify(logs))
+    const json = exportData()
+    localStorage.clear()
+    importData(json)
+    expect(loadReviewLogs()).toEqual(logs)
   })
 })

@@ -1,12 +1,13 @@
-import type { CustomTask, DailyRecord, Progress } from '../types'
+import type { CustomTask, DailyRecord, Progress, ReviewLog } from '../types'
 
 const KEYS = {
   progress: 'cultivation-progress',
   records: 'daily-records',
   customTasks: 'custom-tasks',
+  reviewLogs: 'review-logs',
 }
 
-const DEFAULT_PROGRESS: Progress = { english: [], chinese: [], math: [], totalCultivation: 0, currentRealm: '凡人' }
+const DEFAULT_PROGRESS: Progress = { english: [], chinese: [], math: [], history: [], totalCultivation: 0, currentRealm: '凡人' }
 
 function isStringArray(value: unknown): value is string[] {
   return Array.isArray(value) && value.every((v) => typeof v === 'string')
@@ -19,6 +20,7 @@ function isValidProgress(value: unknown): value is Progress {
     isStringArray(p.english) &&
     isStringArray(p.chinese) &&
     isStringArray(p.math) &&
+    isStringArray(p.history) &&
     typeof p.totalCultivation === 'number' &&
     typeof p.currentRealm === 'string'
   )
@@ -65,6 +67,21 @@ function isValidCustomTask(value: unknown): value is CustomTask {
 
 function isValidCustomTasks(value: unknown): value is CustomTask[] {
   return Array.isArray(value) && value.every(isValidCustomTask)
+}
+
+function isValidReviewLog(value: unknown): value is ReviewLog {
+  if (!value || typeof value !== 'object') return false
+  const l = value as Record<string, unknown>
+  return (
+    typeof l.contentId === 'string' &&
+    typeof l.subject === 'string' &&
+    typeof l.stage === 'number' &&
+    typeof l.nextReviewDate === 'string'
+  )
+}
+
+function isValidReviewLogs(value: unknown): value is ReviewLog[] {
+  return Array.isArray(value) && value.every(isValidReviewLog)
 }
 
 export function loadProgress(): Progress {
@@ -124,11 +141,31 @@ export function saveCustomTasks(tasks: CustomTask[]): void {
   }
 }
 
+export function loadReviewLogs(): ReviewLog[] {
+  const raw = localStorage.getItem(KEYS.reviewLogs)
+  if (!raw) return []
+  try {
+    const parsed = JSON.parse(raw) as unknown
+    return isValidReviewLogs(parsed) ? parsed : []
+  } catch {
+    return []
+  }
+}
+
+export function saveReviewLogs(logs: ReviewLog[]): void {
+  try {
+    localStorage.setItem(KEYS.reviewLogs, JSON.stringify(logs))
+  } catch (e) {
+    console.error('Failed to save review logs', e)
+  }
+}
+
 export function exportData(): string {
   const data = {
     progress: loadProgress(),
     records: loadRecords(),
     customTasks: loadCustomTasks(),
+    reviewLogs: loadReviewLogs(),
   }
   return JSON.stringify(data, null, 2)
 }
@@ -147,7 +184,9 @@ export function importData(json: string): void {
   if (d.progress && !isValidProgress(d.progress)) throw new Error('Invalid progress data')
   if (d.records && !isValidRecords(d.records)) throw new Error('Invalid records data')
   if (d.customTasks && !isValidCustomTasks(d.customTasks)) throw new Error('Invalid custom tasks data')
+  if (d.reviewLogs && !isValidReviewLogs(d.reviewLogs)) throw new Error('Invalid review logs data')
   if (d.progress) saveProgress(d.progress)
   if (d.records) saveRecords(d.records)
   if (d.customTasks) saveCustomTasks(d.customTasks)
+  if (d.reviewLogs) saveReviewLogs(d.reviewLogs)
 }
