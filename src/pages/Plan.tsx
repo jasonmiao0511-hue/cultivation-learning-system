@@ -35,7 +35,7 @@ export default function Plan() {
   return (
     <div className="space-y-4">
       <div className="card">
-        <h1 className="text-xl font-bold">功法总纲 · {TOTAL_DAYS} 天渡劫计划</h1>
+        <h1 className="text-xl font-bold">课程总纲 · {TOTAL_DAYS} 天学习计划</h1>
         <ProgressBar value={completedTasks} max={totalTasks} label={`总进度 ${completedTasks}/${totalTasks}`} />
       </div>
 

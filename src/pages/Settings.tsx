@@ -25,7 +25,7 @@ export default function Settings() {
   return (
     <div className="space-y-4">
       <div className="card">
-        <h2 className="text-lg font-bold">自定义历练</h2>
+        <h2 className="text-lg font-bold">自定义任务</h2>
         <CustomTaskForm onAdd={addCustomTask} />
         <div className="mt-4 space-y-2">
           {customTasks.map((t) => (
@@ -38,10 +38,10 @@ export default function Settings() {
       </div>
 
       <div className="card">
-        <h2 className="text-lg font-bold">修为档案备份</h2>
-        <button onClick={() => downloadBackup()} className="btn-primary mt-2">导出修为档案</button>
+        <h2 className="text-lg font-bold">学分档案备份</h2>
+        <button onClick={() => downloadBackup()} className="btn-primary mt-2">导出学分档案</button>
         <input ref={fileRef} type="file" accept=".json" className="hidden" onChange={handleImport} />
-        <button onClick={() => fileRef.current?.click()} className="btn-primary mt-2 ml-2 bg-slate-700">导入修为档案</button>
+        <button onClick={() => fileRef.current?.click()} className="btn-primary mt-2 ml-2 bg-slate-700">导入学分档案</button>
         {importStatus && (
           <div className={`mt-2 text-sm ${importStatus.type === 'success' ? 'text-emerald-400' : 'text-red-400'}`}>
             {importStatus.message}

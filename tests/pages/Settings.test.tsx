@@ -6,7 +6,7 @@ import { render } from '../test-utils'
 describe('Settings', () => {
   it('renders settings page with custom tasks and backup sections', () => {
     render(<Settings />)
-    expect(screen.getByRole('heading', { name: /自定义历练/ })).toBeInTheDocument()
-    expect(screen.getByRole('heading', { name: /修为档案备份/ })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: /自定义任务/ })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: /学分档案备份/ })).toBeInTheDocument()
   })
 })

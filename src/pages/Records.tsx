@@ -25,10 +25,10 @@ export default function Records() {
   return (
     <div className="space-y-4">
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <div className="card"><div className="text-sm text-slate-400">累计闭关天数</div><div className="text-2xl font-bold">{Object.keys(records).length}</div></div>
-        <div className="card"><div className="text-sm text-slate-400">累计修为</div><div className="text-2xl font-bold">{progress.totalCultivation}</div></div>
-        <div className="card"><div className="text-sm text-slate-400">击败妖兽</div><div className="text-2xl font-bold">{totalCompleted}</div></div>
-        <div className="card"><div className="text-sm text-slate-400">连续闭关</div><div className="text-2xl font-bold">{calculateStreak()}</div></div>
+        <div className="card"><div className="text-sm text-slate-400">累计打卡天数</div><div className="text-2xl font-bold">{Object.keys(records).length}</div></div>
+        <div className="card"><div className="text-sm text-slate-400">累计学分</div><div className="text-2xl font-bold">{progress.totalCultivation}</div></div>
+        <div className="card"><div className="text-sm text-slate-400">完成任务</div><div className="text-2xl font-bold">{totalCompleted}</div></div>
+        <div className="card"><div className="text-sm text-slate-400">连续打卡</div><div className="text-2xl font-bold">{calculateStreak()}</div></div>
       </div>
 
       <Calendar records={records} year={2026} month={7} />

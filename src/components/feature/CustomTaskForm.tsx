@@ -35,7 +35,7 @@ export default function CustomTaskForm({ onAdd }: Props) {
         <option value="daily">每天</option>
         <option value="weekly">每周（按创建日）</option>
       </select>
-      <button onClick={submit} className="btn-primary w-full">添加自定义历练</button>
+      <button onClick={submit} className="btn-primary w-full">添加自定义任务</button>
     </div>
   )
 }

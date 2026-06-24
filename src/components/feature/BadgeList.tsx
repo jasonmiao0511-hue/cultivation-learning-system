@@ -1,10 +1,10 @@
 const BADGES = [
-  { id: 'first', name: '初入仙途', condition: '首次打卡' },
-  { id: 'streak7', name: '七日闭关', condition: '连续 7 天打卡' },
-  { id: 'streak30', name: '月余闭关', condition: '连续 30 天打卡' },
-  { id: 'kill100', name: '百战百胜', condition: '击败 100 只妖兽' },
-  { id: 'cult1000', name: '千年修为', condition: '累计 1000 修为' },
-  { id: 'complete', name: '全科圆满', condition: '完成所有功法' },
+  { id: 'first', name: '初出茅庐', condition: '首次打卡' },
+  { id: 'streak7', name: '七日打卡', condition: '连续 7 天打卡' },
+  { id: 'streak30', name: '月余打卡', condition: '连续 30 天打卡' },
+  { id: 'kill100', name: '百题百胜', condition: '完成 100 个任务' },
+  { id: 'cult1000', name: '千分学分', condition: '累计 1000 学分' },
+  { id: 'complete', name: '全科完成', condition: '完成所有课程' },
 ]
 
 interface Props {

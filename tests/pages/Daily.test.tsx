@@ -6,6 +6,6 @@ import { render } from '../test-utils'
 describe('Daily', () => {
   it('renders today tasks', () => {
     render(<Daily />)
-    expect(screen.getByText(/今日历练/)).toBeInTheDocument()
+    expect(screen.getByText(/今日学习/)).toBeInTheDocument()
   })
 })

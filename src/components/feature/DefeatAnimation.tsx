@@ -22,8 +22,8 @@ export default function DefeatAnimation({ show, onDone }: Props) {
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60">
       <div className="animate-bounce text-center">
         <div className="text-6xl">⚔️</div>
-        <div className="mt-4 text-2xl font-bold text-realm-400">妖兽已击败！</div>
-        <div className="text-slate-300">修为 +10</div>
+        <div className="mt-4 text-2xl font-bold text-realm-400">任务已完成！</div>
+        <div className="text-slate-300">学分 +10</div>
       </div>
     </div>
   )

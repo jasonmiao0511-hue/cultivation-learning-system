@@ -34,7 +34,7 @@ export default function TaskItem({ task, expanded, onToggle, onComplete }: Props
           )}
           {!task.completed && showDone && (
             <div className="mt-3 flex gap-2">
-              <button onClick={onComplete} className="btn-primary">确认击败</button>
+              <button onClick={onComplete} className="btn-primary">确认完成</button>
               <button onClick={() => setShowDone(false)} className="rounded-lg bg-slate-700 px-3 py-2">取消</button>
             </div>
           )}

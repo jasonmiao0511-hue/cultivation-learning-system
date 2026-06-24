@@ -15,7 +15,7 @@ export default function PlanDayCard({ day, date, tasks }: Props) {
         <span className="font-bold">Day {day}</span>
         <span className="text-xs text-slate-400">{date}</span>
       </div>
-      <div className="mt-2 text-xs text-slate-400">{tasks.length} 只妖兽</div>
+      <div className="mt-2 text-xs text-slate-400">{tasks.length} 个任务</div>
       <ProgressBar value={completed} max={tasks.length} />
     </div>
   )

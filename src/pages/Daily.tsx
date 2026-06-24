@@ -10,11 +10,11 @@ import { calculateCultivation } from '../utils/realm'
 import { QUOTES } from '../mocks/quotes'
 
 const subjectNames: Record<string, string> = {
-  english: '英语功法',
-  chinese: '语文功法',
-  math: '数学功法',
-  history: '历史功法',
-  custom: '自定义历练',
+  english: '英语课程',
+  chinese: '语文课程',
+  math: '数学课程',
+  history: '历史课程',
+  custom: '自定义任务',
 }
 
 export default function Daily() {
@@ -73,8 +73,8 @@ export default function Daily() {
     return (
       <div className="card py-12 text-center">
         <div className="text-5xl">🎉</div>
-        <h2 className="mt-4 text-2xl font-bold">今日历练圆满！</h2>
-        <p className="mt-2 text-slate-400">击败 {tasks.length} 只妖兽，获得 {getRecord(getToday()).cultivation} 修为</p>
+        <h2 className="mt-4 text-2xl font-bold">今日学习圆满！</h2>
+        <p className="mt-2 text-slate-400">完成 {tasks.length} 个任务，获得 {getRecord(getToday()).cultivation} 学分</p>
       </div>
     )
   }
@@ -83,9 +83,9 @@ export default function Daily() {
     <div className="grid gap-4 lg:grid-cols-3">
       <div className="lg:col-span-2">
         <div className="card mb-4">
-          <h1 className="text-xl font-bold">{formatDate(getToday())} · 今日历练</h1>
+          <h1 className="text-xl font-bold">{formatDate(getToday())} · 今日学习</h1>
           <p className="text-slate-400">「{quote}」</p>
-          <div className="mt-2 text-sm">已完成 {completedCount}/{tasks.length} · 下一击连击 ×{combo + 1}</div>
+          <div className="mt-2 text-sm">已完成 {completedCount}/{tasks.length} · 下一题连续 ×{combo + 1}</div>
         </div>
 
         {Object.entries(grouped).map(([subject, list]) =>
