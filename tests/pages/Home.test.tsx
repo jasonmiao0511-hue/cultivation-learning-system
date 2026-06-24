@@ -3,10 +3,22 @@ import { screen } from '@testing-library/react'
 import Home from '../../src/pages/Home'
 import { render } from '../test-utils'
 
-describe('Home', () => {
-  it('renders hero and start button', () => {
+describe('Home course hall', () => {
+  it('renders subject nav and chapter cards', () => {
     render(<Home />)
-    expect(screen.getByText('道友，今日该闭关了')).toBeInTheDocument()
-    expect(screen.getByText('开始历练')).toBeInTheDocument()
+    expect(screen.getByText('语文')).toBeInTheDocument()
+    expect(screen.getByText('课内古诗词')).toBeInTheDocument()
+  })
+
+  it('reflects active subject in URL via search params', () => {
+    render(<Home />, { route: '/?subject=math' })
+    expect(screen.getByText('数学')).toBeInTheDocument()
+    expect(screen.getByText('有理数')).toBeInTheDocument()
+  })
+
+  it('falls back to chinese for invalid subject param', () => {
+    render(<Home />, { route: '/?subject=invalid' })
+    expect(screen.getByText('语文')).toBeInTheDocument()
+    expect(screen.getByText('课内古诗词')).toBeInTheDocument()
   })
 })

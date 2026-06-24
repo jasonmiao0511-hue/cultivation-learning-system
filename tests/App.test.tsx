@@ -13,6 +13,7 @@ describe('App scaffold', () => {
 
   it('renders the home page content', () => {
     render(<App />, { route: '/' })
-    expect(screen.getByText('道友，今日该闭关了')).toBeInTheDocument()
+    expect(screen.getByText('语文')).toBeInTheDocument()
+    expect(screen.getByText('课内古诗词')).toBeInTheDocument()
   })
 })
