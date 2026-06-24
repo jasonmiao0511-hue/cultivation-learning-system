@@ -4,6 +4,7 @@ import { generateId } from '../utils/id'
 import { ENGLISH_WORDS } from '../mocks/englishData'
 import { CHINESE_LESSONS } from '../mocks/chineseData'
 import { MATH_TOPICS } from '../mocks/mathData'
+import { HISTORY_TOPICS } from '../mocks/historyData'
 
 const START_DATE = '2026-06-25'
 const END_DATE = '2026-08-25'
@@ -21,7 +22,7 @@ export function generateDailyPlan(date: string, progress: Progress, customTasks:
   englishWords.forEach((word) => {
     tasks.push({
       id: generateId('task'),
-      title: `击败 ${word.word}`,
+      title: `学习单词 ${word.word}`,
       subject: 'english',
       type: 'learn',
       duration: 10,
@@ -40,7 +41,7 @@ export function generateDailyPlan(date: string, progress: Progress, customTasks:
     reviewWords.forEach((word) => {
       tasks.push({
         id: generateId('task'),
-        title: `复习 ${word.word}`,
+        title: `复习单词 ${word.word}`,
         subject: 'english',
         type: 'review',
         duration: 5,
@@ -57,7 +58,7 @@ export function generateDailyPlan(date: string, progress: Progress, customTasks:
   if (chineseLesson) {
     tasks.push({
       id: generateId('task'),
-      title: `参悟 ${chineseLesson.title}`,
+      title: `学习 ${chineseLesson.title}`,
       subject: 'chinese',
       type: 'learn',
       duration: 25,
@@ -73,7 +74,7 @@ export function generateDailyPlan(date: string, progress: Progress, customTasks:
   if (mathTopic) {
     tasks.push({
       id: generateId('task'),
-      title: `攻克 ${mathTopic.title}`,
+      title: `学习 ${mathTopic.title}`,
       subject: 'math',
       type: 'learn',
       duration: 25,
@@ -81,6 +82,22 @@ export function generateDailyPlan(date: string, progress: Progress, customTasks:
       completed: progress.math.includes(mathTopic.id),
       source: 'auto',
       contentId: mathTopic.id,
+    })
+  }
+
+  // 历史
+  const historyTopic = HISTORY_TOPICS[dayIndex % HISTORY_TOPICS.length]
+  if (historyTopic) {
+    tasks.push({
+      id: generateId('task'),
+      title: `学习 ${historyTopic.title}`,
+      subject: 'history',
+      type: 'learn',
+      duration: 20,
+      priority: 'medium',
+      completed: progress.history.includes(historyTopic.id),
+      source: 'auto',
+      contentId: historyTopic.id,
     })
   }
 
@@ -105,12 +122,12 @@ export function generateDailyPlan(date: string, progress: Progress, customTasks:
     }
   })
 
-  // 周末宗门试炼
+  // 周末综合练习
   const dayOfWeek = parseLocalDate(date).getDay()
   if (dayOfWeek === 0 || dayOfWeek === 6) {
     tasks.push({
       id: generateId('task'),
-      title: '宗门试炼 · 周末综合',
+      title: '周末综合练习',
       subject: 'english',
       type: 'practice',
       duration: 30,

@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { generateDailyPlan } from '../../src/services/schedule'
 
-const emptyProgress = { english: [], chinese: [], math: [], totalCultivation: 0, currentRealm: '凡人' }
+const emptyProgress = { english: [], chinese: [], math: [], history: [], totalCultivation: 0, currentRealm: '凡人' }
 
 describe('generateDailyPlan', () => {
   it('generates tasks for day 1', () => {
@@ -13,7 +13,7 @@ describe('generateDailyPlan', () => {
   })
 
   it('marks completed english words', () => {
-    const tasks = generateDailyPlan('2026-06-25', { english: ['e_school_1'], chinese: [], math: [], totalCultivation: 0, currentRealm: '凡人' }, [])
+    const tasks = generateDailyPlan('2026-06-25', { english: ['e_school_1'], chinese: [], math: [], history: [], totalCultivation: 0, currentRealm: '凡人' }, [])
     const wordTask = tasks.find((t) => t.contentId === 'e_school_1')
     expect(wordTask?.completed).toBe(true)
   })
@@ -26,7 +26,7 @@ describe('generateDailyPlan', () => {
 
   it('includes weekend trial on Saturday', () => {
     const tasks = generateDailyPlan('2026-06-27', emptyProgress, [])
-    expect(tasks.some((t) => t.title.includes('宗门试炼'))).toBe(true)
+    expect(tasks.some((t) => t.title.includes('周末综合练习'))).toBe(true)
   })
 
   it('includes daily custom tasks', () => {
@@ -48,5 +48,18 @@ describe('generateDailyPlan', () => {
     expect(tasks.some((t) => t.subject === 'english')).toBe(true)
     expect(tasks.some((t) => t.subject === 'chinese')).toBe(true)
     expect(tasks.some((t) => t.subject === 'math')).toBe(true)
+  })
+
+  it('includes history tasks', () => {
+    const tasks = generateDailyPlan('2026-06-25', emptyProgress, [])
+    expect(tasks.some((t) => t.subject === 'history')).toBe(true)
+  })
+
+  it('uses non-cultivation labels', () => {
+    const tasks = generateDailyPlan('2026-06-25', emptyProgress, [])
+    const titles = tasks.map((t) => t.title).join(' ')
+    expect(titles).not.toContain('击败')
+    expect(titles).not.toContain('参悟')
+    expect(titles).not.toContain('宗门试炼')
   })
 })

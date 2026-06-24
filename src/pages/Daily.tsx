@@ -13,6 +13,7 @@ const subjectNames: Record<string, string> = {
   english: '英语功法',
   chinese: '语文功法',
   math: '数学功法',
+  history: '历史功法',
   custom: '自定义历练',
 }
 
@@ -57,7 +58,7 @@ export default function Daily() {
   }
 
   const grouped = useMemo(() => {
-    const groups: Record<string, Task[]> = { english: [], chinese: [], math: [], custom: [] }
+    const groups: Record<string, Task[]> = { english: [], chinese: [], math: [], history: [], custom: [] }
     tasks.forEach((t) => groups[t.subject].push(t))
     return groups
   }, [tasks])
