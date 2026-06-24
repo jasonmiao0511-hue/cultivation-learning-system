@@ -51,6 +51,7 @@ export interface VocabWord {
   meaning: string
   example: string
   group: string
+  exercises: Exercise[]
 }
 
 export interface Exercise {
@@ -67,4 +68,14 @@ export interface ReviewLog {
   stage: number
   nextReviewDate: string
   lastReviewDate?: string
+}
+
+export interface Chapter {
+  id: string
+  subject: SubjectType
+  title: string
+  summary: string
+  objectives: string[]
+  contentIds: string[]
+  order: number
 }
