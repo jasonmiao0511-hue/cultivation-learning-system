@@ -1,4 +1,4 @@
-export type SubjectType = 'english' | 'chinese' | 'math' | 'custom'
+export type SubjectType = 'english' | 'chinese' | 'math' | 'history' | 'custom'
 export type TaskType = 'learn' | 'review' | 'practice'
 export type Priority = 'low' | 'medium' | 'high'
 
@@ -29,6 +29,7 @@ export interface Progress {
   english: string[]
   chinese: string[]
   math: string[]
+  history: string[]
   totalCultivation: number
   currentRealm: string
 }
@@ -50,4 +51,20 @@ export interface VocabWord {
   meaning: string
   example: string
   group: string
+}
+
+export interface Exercise {
+  id: string
+  type: 'choice' | 'fill' | 'match' | 'order'
+  question: string
+  options?: string[]
+  answer: string | string[] | number
+}
+
+export interface ReviewLog {
+  contentId: string
+  subject: SubjectType
+  stage: number
+  nextReviewDate: string
+  lastReviewDate?: string
 }
