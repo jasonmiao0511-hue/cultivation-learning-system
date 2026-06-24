@@ -7,6 +7,11 @@ function ProgressReader() {
   return <div data-testid="progress">{progress.totalCultivation}</div>
 }
 
+function ReviewLogReader() {
+  const { reviewLogs } = useAppState()
+  return <div data-testid="review-logs">{reviewLogs.length}</div>
+}
+
 function ProgressSetter() {
   const { completeContent } = useAppState()
   return <button onClick={() => completeContent('english', 'e1', 10)}>完成任务</button>
@@ -27,5 +32,17 @@ describe('AppStateContext', () => {
     expect(screen.getByTestId('progress').textContent).toBe('0')
     fireEvent.click(screen.getByText('完成任务'))
     expect(screen.getByTestId('progress').textContent).toBe('10')
+  })
+
+  it('shares review logs across components', () => {
+    render(
+      <AppStateProvider>
+        <ReviewLogReader />
+        <ProgressSetter />
+      </AppStateProvider>,
+    )
+    expect(screen.getByTestId('review-logs').textContent).toBe('0')
+    fireEvent.click(screen.getByText('完成任务'))
+    expect(screen.getByTestId('review-logs').textContent).toBe('1')
   })
 })
