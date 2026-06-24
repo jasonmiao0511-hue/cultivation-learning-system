@@ -8,7 +8,7 @@ describe('App scaffold', () => {
 
   it('renders the navbar title', () => {
     render(<App />)
-    expect(screen.getByText('修仙学习')).toBeInTheDocument()
+    expect(screen.getByText('知了暑假')).toBeInTheDocument()
   })
 
   it('renders the home page content', () => {

@@ -1,3 +1,5 @@
+import { getLevelDisplayName } from '../../utils/level'
+
 interface Props {
   realm: string
   cultivation: number
@@ -10,8 +12,8 @@ export default function RealmBadge({ realm, cultivation }: Props) {
         {realm[0]}
       </div>
       <div>
-        <div className="text-lg font-bold">{realm}期修士</div>
-        <div className="text-sm text-slate-400">累计修为 {cultivation}</div>
+        <div className="text-lg font-bold">{getLevelDisplayName(realm)}</div>
+        <div className="text-sm text-slate-400">累计学分 {cultivation}</div>
       </div>
     </div>
   )
