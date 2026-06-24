@@ -1,5 +1,7 @@
 import { createContext, useContext, useMemo } from 'react'
-import type { CustomTask, DailyRecord, Progress, Task } from '../types'
+import type { CustomTask, DailyRecord, Progress, Task, ReviewLog } from '../types'
+import type { ReviewRating } from '../services/review'
+import type { SubjectType } from '../types'
 import { useProgress } from '../hooks/useProgress'
 import { useRecords } from '../hooks/useRecords'
 import { useCustomTasks } from '../hooks/useCustomTasks'
@@ -7,7 +9,9 @@ import { useDailyTasks } from '../hooks/useDailyTasks'
 
 interface AppState {
   progress: Progress
-  completeContent: (subject: 'english' | 'chinese' | 'math', contentId: string, cultivation: number) => void
+  completeContent: (subject: SubjectType, contentId: string, cultivation: number) => void
+  reviewLogs: ReviewLog[]
+  rateReview: (contentId: string, rating: ReviewRating) => void
   newRealm: string | null
   acknowledgeRealmChange: () => void
 

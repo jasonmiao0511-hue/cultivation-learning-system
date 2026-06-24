@@ -51,4 +51,12 @@ describe('useProgress', () => {
     })
     expect(result.current.newRealm).toBeNull()
   })
+
+  it('completes history content', () => {
+    const { result } = renderHook(() => useProgress())
+    act(() => {
+      result.current.completeContent('history', 'h1', 10)
+    })
+    expect(result.current.progress.history).toContain('h1')
+  })
 })
