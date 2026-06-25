@@ -20,19 +20,19 @@ export function getDueReviews(reviewLogs: ReviewLog[], date: string): ReviewLog[
 
 export function updateReviewAfterRating(log: ReviewLog, rating: ReviewRating, date: string): ReviewLog {
   let nextStage = log.stage
+  let interval = INTERVALS[Math.min(log.stage - 1, INTERVALS.length - 1)]
 
   if (rating === 'forgot') {
     nextStage = 1
+    interval = INTERVALS[0]
   } else if (rating === 'hard') {
     nextStage = Math.min(log.stage, INTERVALS.length)
   } else if (rating === 'good') {
     nextStage = Math.min(log.stage + 1, INTERVALS.length)
   } else if (rating === 'easy') {
     nextStage = Math.min(log.stage + 2, INTERVALS.length)
+    interval = Math.min(interval * 2, 15)
   }
-
-  const intervalIndex = Math.min(nextStage - 1, INTERVALS.length - 1)
-  const interval = INTERVALS[intervalIndex]
 
   return {
     ...log,
