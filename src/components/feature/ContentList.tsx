@@ -22,7 +22,7 @@ export default function ContentList({ chapter, progress, onStart }: Props) {
           >
             <div className="font-bold">{content?.title ?? id}</div>
             <div className="text-xs text-slate-400">{content?.type}</div>
-            {!unlocked && <div className="mt-2 text-xs text-slate-500">🔒 先完成上一项</div>}
+            {!unlocked && <div className="mt-2 text-xs text-slate-500">锁定 · 先完成上一项</div>}
             {unlocked && !completed && (
               <button onClick={() => onStart(id)} className="btn-primary mt-3">开始学习</button>
             )}

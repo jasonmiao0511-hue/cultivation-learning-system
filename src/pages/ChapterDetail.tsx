@@ -2,13 +2,14 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { useAppState } from '../context/AppStateContext'
 import { getChapterById, getChapterProgress } from '../services/chapter'
 import ContentList from '../components/feature/ContentList'
+import type { SubjectType } from '../types'
 
 export default function ChapterDetail() {
   const { id: subjectId, chapterId } = useParams()
   const navigate = useNavigate()
   const { progress } = useAppState()
 
-  const chapter = getChapterById(subjectId as any, chapterId!)
+  const chapter = getChapterById(subjectId as SubjectType, chapterId!)
   if (!chapter) return <div className="card">章节未找到</div>
 
   const { completed, total } = getChapterProgress(chapter, progress)

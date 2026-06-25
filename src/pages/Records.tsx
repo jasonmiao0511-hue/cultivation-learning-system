@@ -5,6 +5,7 @@ import BadgeList from '../components/feature/BadgeList'
 import { ENGLISH_WORDS } from '../mocks/englishData'
 import { CHINESE_LESSONS } from '../mocks/chineseData'
 import { MATH_TOPICS } from '../mocks/mathData'
+import { HISTORY_TOPICS } from '../mocks/historyData'
 
 export default function Records() {
   const { records, calculateStreak, progress } = useAppState()
@@ -21,6 +22,7 @@ export default function Records() {
   const allComplete = progress.english.length >= ENGLISH_WORDS.length
     && progress.chinese.length >= CHINESE_LESSONS.length
     && progress.math.length >= MATH_TOPICS.length
+    && progress.history.length >= HISTORY_TOPICS.length
 
   return (
     <div className="space-y-4">

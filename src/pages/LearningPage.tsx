@@ -19,7 +19,7 @@ export default function LearningPage() {
   if (!content) return <div className="card">内容未找到</div>
 
   const completed = progress[subject].includes(content.id)
-  const canComplete = (exercisesPassed || completed) && !completed
+  const canComplete = exercisesPassed && !completed
 
   const currentIndex = chapter?.contentIds.indexOf(content.id) ?? -1
   const prevId = chapter && currentIndex > 0 ? chapter.contentIds[currentIndex - 1] : undefined

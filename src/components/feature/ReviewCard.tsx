@@ -10,11 +10,12 @@ interface Props {
 export default function ReviewCard({ content, onRate }: Props) {
   const [revealed, setRevealed] = useState(false)
 
-  const prompt = content.subject === 'english'
-    ? content.title
-    : content.title
+  const prompt = content.title
 
-  const answer = content.meta?.meaning ?? content.content.slice(0, 80)
+  const answer = content.meta?.meaning
+    ?? content.notes?.join('；')
+    ?? content.example
+    ?? content.content.slice(0, 80)
 
   return (
     <div className="card mx-auto max-w-xl space-y-6 text-center">
