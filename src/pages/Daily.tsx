@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useEffect } from 'react'
 import type { Task } from '../types'
 import { useAppState } from '../context/AppStateContext'
 import TaskItem from '../components/feature/TaskItem'
@@ -7,6 +7,7 @@ import DefeatAnimation from '../components/feature/DefeatAnimation'
 import RealmUpAnimation from '../components/feature/RealmUpAnimation'
 import { getToday, formatDate } from '../utils/date'
 import { calculateCultivation } from '../utils/realm'
+import { downloadBackup } from '../services/backup'
 import { QUOTES } from '../mocks/quotes'
 
 const subjectNames: Record<string, string> = {
@@ -22,10 +23,25 @@ export default function Daily() {
   const [expandedId, setExpandedId] = useState<string | null>(() => tasks.find((t) => !t.completed)?.id || null)
   const [combo, setCombo] = useState(0)
   const [showDefeat, setShowDefeat] = useState(false)
+  const [showBackup, setShowBackup] = useState(false)
 
   const quote = useMemo(() => QUOTES[Math.floor(Math.random() * QUOTES.length)], [])
   const completedCount = tasks.filter((t) => t.completed).length
   const allDone = completedCount === tasks.length && tasks.length > 0
+
+  useEffect(() => {
+    if (allDone) {
+      const lastBackup = localStorage.getItem('zhiliao-last-backup-date')
+      setShowBackup(lastBackup !== getToday())
+    }
+  }, [allDone])
+
+  const handleBackup = () => {
+    const filename = `zhiliao-${getToday()}.json`
+    downloadBackup(filename)
+    localStorage.setItem('zhiliao-last-backup-date', getToday())
+    setShowBackup(false)
+  }
 
   const handleComplete = (task: Task, index: number) => {
     if (task.completed) return
@@ -71,10 +87,23 @@ export default function Daily() {
 
   if (allDone) {
     return (
-      <div className="card py-12 text-center">
-        <div className="text-5xl">🎉</div>
-        <h2 className="mt-4 text-2xl font-bold">今日学习圆满！</h2>
-        <p className="mt-2 text-slate-400">完成 {tasks.length} 个任务，获得 {getRecord(getToday()).cultivation} 学分</p>
+      <div className="space-y-4">
+        <div className="card py-12 text-center">
+          <div className="text-5xl">🎉</div>
+          <h2 className="mt-4 text-2xl font-bold">今日学习圆满！</h2>
+          <p className="mt-2 text-slate-400">完成 {tasks.length} 个任务，获得 {getRecord(getToday()).cultivation} 学分</p>
+        </div>
+
+        {showBackup ? (
+          <div className="card text-center">
+            <div className="text-4xl">💾</div>
+            <h3 className="mt-2 text-lg font-bold">备份一下今天的学习记录吧</h3>
+            <p className="mt-1 text-slate-400">点一下按钮，就能把进度保存到电脑上</p>
+            <button onClick={handleBackup} className="btn-primary mt-4">一键备份</button>
+          </div>
+        ) : (
+          <div className="card text-center text-slate-400">今日学习记录已备份，明天继续加油！</div>
+        )}
       </div>
     )
   }
